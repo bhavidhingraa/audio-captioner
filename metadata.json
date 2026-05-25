@@ -1,0 +1,6 @@
+{
+  "name": "Vidstack Audio Captioner",
+  "description": "Upload MP3 files and automatically generate synchronous text subtitles using OpenAI's Whisper API, previewing them instantly inside a responsive Vidstack media player.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

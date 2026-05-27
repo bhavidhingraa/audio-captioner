@@ -45,8 +45,8 @@ export default function Player({ audioUrl, vttContent, chaptersVtt, status, erro
                   Vidstack uses a unified player. 
                   We map the WebVTT url directly into the tracks prop.
                 */}
-                <MediaPlayer 
-                   src={audioUrl} 
+                <MediaPlayer
+                   src={{ src: audioUrl, type: 'audio/mp3' }}
                    className="w-full"
                 >
                     <MediaProvider />

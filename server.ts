@@ -12,6 +12,29 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+function findAvailablePort(startPort: number, maxAttempts = 100): Promise<number> {
+  return new Promise((resolve, reject) => {
+    let port = startPort;
+    let attempts = 0;
+
+    const tryListen = () => {
+      const server = app.listen(port, '0.0.0.0', () => {
+        server.close(() => resolve(port));
+      });
+      server.on('error', (err: NodeJS.ErrnoException) => {
+        if (err.code === 'EADDRINUSE' && attempts < maxAttempts) {
+          attempts++;
+          port++;
+          tryListen();
+        } else {
+          reject(err);
+        }
+      });
+    };
+    tryListen();
+  });
+}
+
 // Setup Multer for secure 25MB file upload handling
 const uploadDir = path.join(process.cwd(), 'uploads');
 if (!fs.existsSync(uploadDir)) {
@@ -148,8 +171,9 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server running on port ${PORT}`);
+  const port = await findAvailablePort(Number(PORT));
+  app.listen(port, '0.0.0.0', () => {
+    console.log(`Server running on port ${port}`);
   });
 }
 

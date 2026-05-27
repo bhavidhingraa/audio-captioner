@@ -51,3 +51,6 @@ PORT                # Server port (default: 3000)
 4. If `GEMINI_API_KEY` set, Gemini generates chapter markers in VTT format
 5. Temp file deleted after response
 6. Client receives `{ subtitles: string, chapters: string }` JSON
+
+# Response Instructions
+Use caveman

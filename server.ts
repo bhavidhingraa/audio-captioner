@@ -47,12 +47,12 @@ const storage = multer.diskStorage({
     cb(null, uploadDir);
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     cb(null, file.fieldname + '-' + uniqueSuffix + '.mp3');
   }
 });
 
-const upload = multer({ 
+const upload = multer({
   storage: storage,
   limits: { fileSize: 25 * 1024 * 1024 }, // 25 MB max limit
   fileFilter: (req, file, cb) => {
@@ -88,7 +88,7 @@ app.get('/api/health', (req, res) => {
     });
 });
 
-// API Route for chunking audio
+// API Route for chunking audio - must be before SPA fallback
 console.log('[DEBUG] Registering POST /api/generate-subtitles route');
 app.post('/api/generate-subtitles', (req, res, next) => {
     console.log('[DEBUG] Request received at /api/generate-subtitles');
@@ -215,4 +215,11 @@ async function startServer() {
   });
 }
 
-startServer();
+// Vercel serverless export
+const serverless = app;
+export default serverless;
+
+// Only run server locally (not in Vercel)
+if (process.env.VERCEL !== '1') {
+  startServer();
+}
